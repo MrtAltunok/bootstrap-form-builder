@@ -59,6 +59,13 @@ $(document).ready(function () {
         },
         connectToSortable: ".form_builder_area"
     });
+ ///File upload
+    $(".form_bal_file").draggable({
+        helper: function () {
+            return getFileFieldHTML();
+        },
+        connectToSortable: ".form_builder_area"
+    });
 
     $(".form_builder_area").sortable({
         cursor: 'move',
@@ -123,6 +130,12 @@ $(document).ready(function () {
         var field = generateField();
         var opt1 = generateField();
         var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field pull-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div><hr/><div class="row li_row form_output" data-type="checkbox" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Label" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"><input type="text" name="text_' + field + '" class="form-control form_input_name" placeholder="Name"/></div></div><div class="col-md-12"><div class="form-group"><div class="mt-checkbox-list checkbox_list_' + field + '"><label class="mt-checkbox mt-checkbox-outline"><input data-opt="' + opt1 + '" type="checkbox" name="checkbox_' + field + '" value="Value"> <p class="c_opt_name_' + opt1 + '">Option</p><span></span></label></div></div></div></div><div class="row li_row"><div class="col-md-12"><div class="field_extra_info_' + field + '"><div data-field="' + field + '" class="row checkbox_row_' + field + '" data-opt="' + opt1 + '"><div class="col-md-4"><div class="form-group"><input type="text" value="Option" class="c_opt form-control"/></div></div><div class="col-md-4"><div class="form-group"><input type="text" value="Value" class="c_val form-control"/></div></div><div class="col-md-4"><i class="margin-top-5 fa fa-plus-circle fa-2x default_blue add_more_checkbox" data-field="' + field + '"></i></div></div></div></div></div></div>';
+        return $('<div>').addClass('li_' + field + ' form_builder_field').html(html);
+    }
+    //File upload
+       function getFileFieldHTML() {
+        var field = generateField();
+        var html = '<div class="all_div"><div class="row li_row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-sm remove_bal_field float-right" data-field="' + field + '"><i class="fa fa-times"></i></button></div></div></div><hr/><div class="row li_row form_output" data-type="file" data-field="' + field + '"><div class="col-md-12"><div class="form-group"><input type="text" name="label_' + field + '" class="form-control form_input_label" value="Baslik" data-field="' + field + '"/></div></div><div class="col-md-12"><div class="form-group"></div></div><div class="col-md-12"><div class="form-check"><label class="form-check-label"><input data-field="' + field + '" type="checkbox" class="form-check-input form_input_req">Girilmesi zorunlu mu?</label></div></div></div>';
         return $('<div>').addClass('li_' + field + ' form_builder_field').html(html);
     }
 
@@ -344,7 +357,7 @@ $(document).ready(function () {
                 if (checkbox.is(':checked')) {
                     required = 'required';
                 }
-                html += '<div class="form-group"><label class="control-label">' + label + '</label><textarea rows="5" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '/></div>';
+                html += '<div class="form-group"><label class="control-label">' + label + '</label><textarea rows="5" name="' + name + '" placeholder="' + placeholder + '" class="form-control" ' + required + '></textarea></div>';
             }
             if (data_type === 'date') {
                 var checkbox = $(this).find('.form-check-input');
@@ -385,6 +398,16 @@ $(document).ready(function () {
                     option_html += '<div class="form-check"><label class="form-check-label"><input type="checkbox" class="form-check-input" name="' + name + '[]" value="' + value + '">' + option + '</label></div>';
                 });
                 html += '<div class="form-group"><label class="control-label">' + label + '</label>' + option_html + '</div>';
+            }
+            //File upload
+            if (data_type === 'file') {
+                var field = generateField();
+                var checkbox = $(this).find('.form-check-input');
+                var required = '';
+                if (checkbox.is(':checked')) {
+                    required = 'required';
+                }
+                html += '<div class="form-group"><label class="control-label" name="label_' + field + '">' + label + '</label><input type="text" name="label_' + field + '" value="' + label + '" hidden/><input type="file" name="file_' + field + '" class="form-control" ' + required + '/></div>';
             }
         });
         if (html.length) {
